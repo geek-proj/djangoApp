@@ -1,0 +1,30 @@
+{% extends 'content.html' %}
+
+    {% block registration %}
+        <style>
+            .container1{
+                position: absolute;
+                left:50%;
+                top:50%;
+                transform: translate(-50%,-50%);
+            }
+        </style>
+        {% load crispy_forms_tags %}
+            <div class="container container1 w-50">
+                    <div class="card-body d-flex flex-column ">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+                                    <span>{{ message }}</span>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <a href="{% url 'login' %}" class="btn btn-outline-primary">Login</a>
+                        </form>
+                </div>
+            </div>
+{% endblock %}

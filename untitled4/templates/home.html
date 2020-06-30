@@ -1,0 +1,66 @@
+{% extends 'content.html' %}
+
+    {% block post %}
+        {% load widget_tweaks %}
+
+        <style>
+
+        </style>
+        <div class="container w-40">
+            <div class="w-40">
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                        <form action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                                <div class="form-group" style="padding: 10px">
+                                    <div class="input-group mb-3">
+                                      <div class="input-group-prepend">
+                                        <span class="input-group-text">Upload</span>
+                                      </div>
+                                      <div class="custom-file">
+                                          {% render_field form.image class="custom-file-input" %}
+                                        <label class="custom-file-label" for="inputGroupFile01">Upload Image</label>
+                                      </div>
+                                    </div>
+                                    <div>
+                                        {{ form.text.label }}
+                                       {% render_field form.text class="form-control" %}
+                                    </div>
+
+                                </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                             </div>
+                        </form>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div class="container">
+                {% for post in countComments.posts %}
+                    <div class="card shadow-none p-3 mb-3 rounded" style="margin: 10px" >
+                        <div style="background-image: url({{ post.post.image.url }});height: 100px;width:100%">
+                        </div>
+                         <div class="card-body">
+                             <blockquote class="blockquote mb-0">
+                              <p>{{ post.post.text }}</p>
+                            </blockquote>
+                             <div >
+                                <button class="btn btn-square btn-outline-primary" onclick="fetchComments('{% url 'comment_detail' post.post.id %}')" data-toggle="collapse" data-target="#collapseExample{{ post.ids }}">
+                                    <small>Comments({{ post.count }})</small>
+                                </button>
+                            </div>
+                         </div>
+                        {% include 'comment.html' with post=post%}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    {% endblock %}

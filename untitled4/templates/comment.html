@@ -1,0 +1,57 @@
+
+<div class="collapse card" id="collapseExample{{ post.ids }}">
+    {% load widget_tweaks %}
+    <div class="card-body shadow-none white">
+        <div class="card-fetch" style="max-height: 100px;overflow: scroll">
+        </div>
+    </div>
+    <div class="card-footer">
+        <form method="post" id="commentForm" action="{% url 'comment_create' post.post.id %}">
+            <div class="input-group mb-3">
+                {% csrf_token %}
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Comment</span>
+                </div>
+                {% render_field form.text class="form-control text" %}
+                <div class="input-group-append bg-primary" id="send" onclick="postComment('{% url 'comment_create' post.post.id %}')">
+                    <span>Send</span>
+                  </div>
+            </div>
+        </form>
+    </div>
+    <script type="application/javascript">
+            function fetchComments(url) {
+                $('.card-fetch').empty()
+                $.ajax({
+                    type:'GET',
+                    headers:{
+                        'content-type':'application/json'
+                    },
+                    url: url,
+                    success: function (data) {
+                       for (var i = 0;i < data.length;i++){
+                           var text = data[i]['fields']['text'];
+                           $('.card-fetch').append("<div class='card' style='padding: 5px;margin-bottom: 5px'><small>" + text + "</small><div>")
+                       }
+                    },
+                    error:function (error) {
+                        console.log(error)
+                    }
+                  });
+            }
+
+            function postComment(url) {
+                $.ajax({
+                    type:'POST',
+                    url:url,
+                    data: $("#commentForm").serialize(),
+                    success:function (data) {
+                        {#console.log(data['form'] + "   " + data[0])#}
+                    },
+                    error:function (error) {
+                        {#console.log(error + " error")#}
+                    }
+                })
+            }
+        </script>
+</div>
